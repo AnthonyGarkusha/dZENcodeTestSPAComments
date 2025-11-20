@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const API_URL = 'http://localhost:32775/api/comments'; // заменишь под свой backend
+const API_URL = 'http://localhost:32783/api/comments'; // заменишь под свой backend
 
 @Injectable({
   providedIn: 'root',
