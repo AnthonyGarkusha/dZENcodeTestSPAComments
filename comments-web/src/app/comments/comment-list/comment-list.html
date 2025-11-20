@@ -1,0 +1,9 @@
+<div *ngIf="loading">Загрузка...</div>
+
+<div *ngIf="!loading">
+  <div *ngFor="let c of comments" class="comment">
+    <strong>{{ c.userName }}</strong> —
+    <small>{{ c.email }}</small>
+    <p>{{ c.text }}</p>
+  </div>
+</div>

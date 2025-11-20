@@ -1,0 +1,8 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input formControlName="userName" placeholder="User Name" required />
+  <input formControlName="email" placeholder="Email" required />
+  <input formControlName="homePage" placeholder="Home Page (optional)" />
+  <textarea formControlName="text" placeholder="Комментарий..." required></textarea>
+
+  <button type="submit">Отправить</button>
+</form>
