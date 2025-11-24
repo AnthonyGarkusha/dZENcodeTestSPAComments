@@ -1,41 +1,49 @@
-import { Component, inject } from '@angular/core';
-import { CommentDto, CommentsService } from '../comments.service';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { CommentsService, CommentDto } from '../comments.service';
 
 @Component({
   selector: 'app-comment-form',
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './comment-form.html',
-  styleUrl: './comment-form.scss',
+  styleUrls: ['./comment-form.scss']
 })
-export class CommentForm {
-  private fb = inject(FormBuilder);
-  private service = inject(CommentsService);
+export class CommentFormСomponent {
 
-  form = this.fb.group({
-    userName: [''],
-    email: [''],
-    homePage: [''],
-    text: [''],
+  @Input() parentId: number | null = null;
 
-  });
+  @Output() submitted = new EventEmitter<void>();
 
-  
-  submit() {
-    if (this.form.valid) {
+  form: FormGroup;
 
-    const data = this.form.value as CommentDto;
+  constructor(
+    private fb: FormBuilder,
+    private commentsService: CommentsService
+  ) {
+    this.form = this.fb.group({
+      userName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      homepage: [''],
+      text: ['', Validators.required]
+    });
+  }
 
-    this.service.createComment(data).subscribe({
-      next: (result) => {
-        console.log("Created:", result);
+  send() {
+    if (this.form.invalid) return;
+
+    const data = {
+      ...this.form.value,
+      parentId: this.parentId
+    } as CommentDto;
+
+    this.commentsService.createComment(data).subscribe({
+      next: () => {
         this.form.reset();
-        document.dispatchEvent(new Event('comment-added'));
-
+        this.submitted.emit();
       },
-      error: err => console.error(err)
-      });
-    } 
+      error: (err) => console.error(err)
+    });
   }
 }

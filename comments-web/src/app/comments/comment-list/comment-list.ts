@@ -1,19 +1,23 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { CommentsService, CommentDto } from '../comments.service';
-import { DatePipe } from '@angular/common';
-import { NgIf, NgFor } from '@angular/common';
+import { CommentItemComponent } from '../comment-item/comment-item';
+
 @Component({
   selector: 'app-comment-list',
   standalone: true,
-  imports: [DatePipe, NgIf, NgFor],
   templateUrl: './comment-list.html',
-  styleUrl: './comment-list.scss',
+  styleUrls: ['./comment-list.scss'],
+  imports: [CommonModule, CommentItemComponent]
 })
-export class CommentList implements OnInit {
+export class CommentListComponent implements OnInit {
 
-  comments: CommentDto[] = [];
+  @Input() parentId: number | null = null;
 
-  constructor(private commentsService: CommentsService) { }
+  comments = signal<CommentDto[]>([]);
+  loading = false;
+
+  constructor(private commentsService: CommentsService) {}
 
   ngOnInit(): void {
     this.loadComments();
@@ -24,11 +28,40 @@ export class CommentList implements OnInit {
   }
 
   loadComments() {
-    this.commentsService.getComments().subscribe({
-      next: (data) => {
-        this.comments = data;
-      },
-      error: err => console.error(err)
+    this.commentsService.getComments().subscribe(all => {
+      this.comments.set(this.buildTree(all));
     });
   }
+
+  buildTree(comments: CommentDto[]): CommentDto[] {
+    // создаём быстрый lookup-словарь комментариев
+    const map = new Map<number, CommentDto>();
+
+    // каждому комменту добавляем replies = []
+    comments.forEach(c => {
+      c.replies = [];
+      map.set(c.id, c);
+    });
+
+    const roots: CommentDto[] = [];
+
+    comments.forEach(c => {
+      if (c.parentId == null) {
+        roots.push(c);
+      } else {
+        const parent = map.get(c.parentId);
+        if (parent) {
+          parent.replies.push(c);
+        }
+      }
+    });
+
+    return roots;
+  }
+
+  onChildSubmitted() {
+    this.loadComments();       // обновляем свой уровень дерева
+  }
+
+
 }

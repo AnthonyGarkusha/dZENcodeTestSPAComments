@@ -1,1 +1,34 @@
-<p>comment-item works!</p>
+<div class="comment-item">
+
+  <div class="header">
+    <span class="user">{{ comment.userName }}</span>
+    <span class="email">&lt;{{ comment.email }}&gt;</span>
+    <span class="date">{{ comment.createdAt | date:'short' }}</span>
+  </div>
+
+  <div class="body">
+    {{ comment.text }}
+  </div>
+
+  <div class="actions">
+    <button (click)="toggleReplyForm()">
+      {{ showReplyForm ? 'Отмена' : 'Ответить' }}
+    </button>
+  </div>
+
+  <!-- reply form  -->
+  <div class="reply-form" *ngIf="showReplyForm">
+    <app-comment-form
+      [parentId]="comment.id"
+      (submitted)="onReplySubmitted()">
+    </app-comment-form>
+  </div>
+
+  <!-- nested comments --> 
+  <div class="replies" *ngIf="comment.replies.length">
+    <app-comment-item
+      *ngFor="let c of comment.replies"
+      [comment]="c">
+    </app-comment-item>
+  </div>
+</div>

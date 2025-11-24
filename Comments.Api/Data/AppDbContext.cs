@@ -14,11 +14,7 @@ namespace Comments.Api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Comment>()
-                .HasOne(c => c.Parent)
-                .WithMany(c => c.Replies)
-                .HasForeignKey(c => c.ParentId)
-                .OnDelete(DeleteBehavior.Restrict);
+            
         }
     }
 }

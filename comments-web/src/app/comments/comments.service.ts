@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface CommentDto {
-  id?: number;
+  id: number;
   userName: string;
   email: string;
   homepage?: string;
   text: string;
   createdAt?: string;
-  parentId?: number | null;
-  replies?: CommentDto[];
+  parentId: number | null;
+  replies: CommentDto[];
 }
 
 @Injectable({

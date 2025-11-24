@@ -18,17 +18,22 @@ namespace Comments.Api.Controllers
 
         // GET api/comments
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IEnumerable<Comment>> Get()
         {
-            var comments = await _context.Comments
-                .Where(c => c.ParentId == null)
-                .Include(c => c.Replies)
-                .OrderByDescending(c => c.CreatedAt)
-                .ToListAsync();
+            var comments = await _context.Comments.ToListAsync();
 
-            return Ok(comments);
+            return comments.Select(c => new Comment
+            {
+                Id = c.Id,
+                UserName = c.UserName,
+                Email = c.Email,
+                HomePage = c.HomePage,
+                Text = c.Text,
+                CreatedAt = c.CreatedAt,
+                ParentId = c.ParentId
+            }).ToList();
         }
-
+        
         // POST api/comments
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Comment comment)

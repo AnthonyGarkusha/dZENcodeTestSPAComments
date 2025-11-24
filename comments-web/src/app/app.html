@@ -1,4 +1,7 @@
-<h1>Комментарии</h1>
+<h2>Комментарии</h2>
 
-<app-comment-form></app-comment-form>
-<app-comment-list></app-comment-list>
+<app-comment-form (submitted)="reloadRoot()"></app-comment-form>
+
+<hr>
+
+<app-comment-list #rootList></app-comment-list>

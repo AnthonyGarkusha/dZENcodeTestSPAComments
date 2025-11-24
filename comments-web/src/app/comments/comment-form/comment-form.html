@@ -1,8 +1,13 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <input formControlName="userName" placeholder="User Name" required />
-  <input formControlName="email" placeholder="Email" required />
-  <input formControlName="homePage" placeholder="Home Page (optional)" />
-  <textarea formControlName="text" placeholder="Комментарий..." required></textarea>
+<div class="comment-form" [formGroup]="form">
 
-  <button type="submit">Отправить</button>
-</form>
+  <div class="row">
+    <input type="text" placeholder="Имя" formControlName="userName">
+    <input type="email" placeholder="Email" formControlName="email">
+    <input type="text" placeholder="Homepage" formControlName="homepage">
+  </div>
+
+  <textarea formControlName="text" placeholder="Ваш комментарий..." rows="4"></textarea>
+
+  <button (click)="send()" [disabled]="form.invalid">Отправить</button>
+
+</div>

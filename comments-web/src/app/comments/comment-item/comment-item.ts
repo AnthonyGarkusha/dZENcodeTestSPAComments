@@ -1,11 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, Input, EventEmitter, Output, Pipe } from '@angular/core';
+import { DatePipe, NgIf, NgFor } from '@angular/common';
+import { CommentDto } from '../comments.service';
+import { CommentFormСomponent } from '../comment-form/comment-form';
 
 @Component({
   selector: 'app-comment-item',
-  imports: [],
+  standalone: true,
   templateUrl: './comment-item.html',
-  styleUrl: './comment-item.scss',
+  styleUrls: ['./comment-item.scss'],
+  imports: [DatePipe, NgIf, NgFor, CommentFormСomponent,]
 })
-export class CommentItem {
+export class CommentItemComponent {
 
+  @Input() comment!: CommentDto;
+
+  @Output() reload = new EventEmitter<void>();
+
+  // флаг для показа формы
+  showReplyForm = false;
+
+  toggleReplyForm() {
+    this.showReplyForm = !this.showReplyForm;
+  }
+
+  onReplySubmitted() {
+    // Закрываем форму после отправки
+    this.showReplyForm = false;
+    this.reload.emit();   
+  }
+
+  
 }
