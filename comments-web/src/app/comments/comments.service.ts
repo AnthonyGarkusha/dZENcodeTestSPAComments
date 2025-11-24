@@ -2,21 +2,30 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const API_URL = 'http://localhost:32783/api/comments'; // заменишь под свой backend
+export interface CommentDto {
+  id?: number;
+  userName: string;
+  email: string;
+  homepage?: string;
+  text: string;
+  createdAt?: string;
+  parentId?: number | null;
+}
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CommentsService {
-  private http = inject(HttpClient);
 
-  getComments(page: number = 1, sort: string = 'date_desc'): Observable<any> {
-    return this.http.get(API_URL, {
-      params: { page, sort }
-    });
+  private apiUrl = 'http://localhost:5000/api/comments';
+
+  constructor(private http: HttpClient) { }
+
+  getComments(): Observable<CommentDto[]> {
+    return this.http.get<CommentDto[]>(this.apiUrl);
   }
 
-  createComment(dto: any): Observable < any > {
-    return this.http.post(API_URL, dto);
+  createComment(model: CommentDto): Observable<CommentDto> {
+    return this.http.post<CommentDto>(this.apiUrl, model);
   }
 }

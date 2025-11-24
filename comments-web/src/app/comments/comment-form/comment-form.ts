@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommentsService } from '../comments.service';
+import { CommentDto, CommentsService } from '../comments.service';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -18,14 +18,22 @@ export class CommentForm {
     email: [''],
     homePage: [''],
     text: [''],
+
   });
 
+  
   submit() {
-    if (this.form.invalid) return;
+    if (this.form.valid) {
 
-    this.service.createComment(this.form.value).subscribe(() => {
-      alert('Комментарий отправлен!');
-      this.form.reset();
-    });
+    const data = this.form.value as CommentDto;
+
+    this.service.createComment(data).subscribe({
+      next: (result) => {
+        console.log("Created:", result);
+        this.form.reset();
+      },
+      error: err => console.error(err)
+      });
+    } 
   }
 }

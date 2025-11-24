@@ -16,9 +16,9 @@ export class CommentList implements OnInit {
   loading = true;
 
   ngOnInit() {
-    this.service.getComments().subscribe((res: { items: any; }) => {
-      this.comments = res.items || res;
-      this.loading = false;
+    this.service.getComments().subscribe({
+      next: comments => this.comments = comments,
+      error: err => console.error(err)
     });
   }
 }
