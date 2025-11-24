@@ -10,6 +10,7 @@ export interface CommentDto {
   text: string;
   createdAt?: string;
   parentId?: number | null;
+  replies?: CommentDto[];
 }
 
 @Injectable({

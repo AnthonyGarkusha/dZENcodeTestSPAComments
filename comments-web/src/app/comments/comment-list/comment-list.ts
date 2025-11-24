@@ -1,23 +1,33 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommentsService } from '../comments.service';
-import { CommonModule } from '@angular/common';
-
+import { CommentsService, CommentDto } from '../comments.service';
+import { DatePipe } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 @Component({
   selector: 'app-comment-list',
   standalone: true,
-  imports: [],
+  imports: [DatePipe, NgIf, NgFor],
   templateUrl: './comment-list.html',
   styleUrl: './comment-list.scss',
 })
 export class CommentList implements OnInit {
-  private service = inject(CommentsService);
 
-  comments: any[] = [];
-  loading = true;
+  comments: CommentDto[] = [];
 
-  ngOnInit() {
-    this.service.getComments().subscribe({
-      next: comments => this.comments = comments,
+  constructor(private commentsService: CommentsService) { }
+
+  ngOnInit(): void {
+    this.loadComments();
+
+    document.addEventListener('comment-added', () => {
+      this.loadComments();
+    });
+  }
+
+  loadComments() {
+    this.commentsService.getComments().subscribe({
+      next: (data) => {
+        this.comments = data;
+      },
       error: err => console.error(err)
     });
   }

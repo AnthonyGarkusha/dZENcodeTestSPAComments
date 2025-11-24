@@ -1,9 +1,13 @@
-<div *ngIf="loading">Загрузка...</div>
+<div class="comments">
+  <div *ngFor="let c of comments" class="comment-item">
+    <div class="comment-header">
+      <strong>{{ c.userName }}</strong>
+      <span class="email">{{ c.email }}</span>
+      <span class="date">{{ c.createdAt | date:'short' }}</span>
+    </div>
 
-<div *ngIf="!loading">
-  <div *ngFor="let c of comments" class="comment">
-    <strong>{{ c.userName }}</strong> —
-    <small>{{ c.email }}</small>
-    <p>{{ c.text }}</p>
+    <div class="comment-text">
+      {{ c.text }}
+    </div>
   </div>
 </div>

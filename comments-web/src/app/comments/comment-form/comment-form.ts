@@ -31,6 +31,8 @@ export class CommentForm {
       next: (result) => {
         console.log("Created:", result);
         this.form.reset();
+        document.dispatchEvent(new Event('comment-added'));
+
       },
       error: err => console.error(err)
       });
