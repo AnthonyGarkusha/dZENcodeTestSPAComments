@@ -4,6 +4,29 @@
   <small class="empty">Нет комментариев</small>
 </div>
 
+<div class="sort-panel">
+  <button (click)="setSort('userName')">
+    User Name
+    <span *ngIf="sortField === 'userName'">
+      {{ sortDirection === 'asc' ? '▲' : '▼' }}
+    </span>
+  </button>
+
+  <button (click)="setSort('email')">
+    E-Mail
+    <span *ngIf="sortField === 'email'">
+      {{ sortDirection === 'asc' ? '▲' : '▼' }}
+    </span>
+  </button>
+
+  <button (click)="setSort('createdAt')">
+    Date
+    <span *ngIf="sortField === 'createdAt'">
+      {{ sortDirection === 'asc' ? '▲' : '▼' }}
+    </span>
+  </button>
+</div>
+
 <div>
   <app-comment-item
     *ngFor="let c of comments()"

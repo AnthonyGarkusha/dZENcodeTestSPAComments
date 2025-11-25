@@ -8,7 +8,7 @@ export interface CommentDto {
   email: string;
   homepage?: string;
   text: string;
-  createdAt?: string;
+  createdAt: string;
   parentId: number | null;
   replies: CommentDto[];
 }
